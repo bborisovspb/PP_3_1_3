@@ -18,6 +18,17 @@
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</div>
     <br/>
 
+<!--    <label for="roleList"> Roles: </label>-->
+<!--    <input type="checkbox" th:field="*{roles}" name="roles" id="roles-->
+<!--               th:each="role : ${roleList}"/>-->
+
+<!--    <input type="checkbox" name="roles" id="roles"/> -->
+
+<!--           th:text="${role.name}"    />-->
+<!--           th:value="${role.id}"-->
+<!--           -->
+
+    <br/>
 
 
 
@@ -43,6 +54,8 @@
     <input type="text" th:field="*{email}" id="email">
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error</div>
     <br/>
+
+
 
     <input type="submit" value="Edit">
 </form>

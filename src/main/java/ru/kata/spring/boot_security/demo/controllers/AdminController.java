@@ -5,20 +5,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public AdminController(UserServiceImpl userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
@@ -50,7 +53,10 @@ public class AdminController {
     }
 
     @GetMapping("/edit")
-    public String getViewForEditUser(Model model, @RequestParam("edit") int id) {
+    public String getViewForEditUser(Principal principal, Model model, @RequestParam("edit") int id) {
+        User loggedInUser = userService.findByUserName(principal.getName());
+        List<Role> roleList = loggedInUser.getRoles();
+        model.addAttribute("roleList", roleList);
         model.addAttribute("user", userService.userInfo(id));
         return "edit";
     }
@@ -58,7 +64,7 @@ public class AdminController {
     @PostMapping("/edit")
     public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "edit";
+            return "redirect:/admin";
         }
         userService.updateUser(user);
         return "redirect:/admin";
@@ -69,4 +75,18 @@ public class AdminController {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
+
+    @GetMapping("/BS")
+    public String getUserName(Principal principal, Model model) {
+        User loggedInUser = userService.findByUserName(principal.getName());
+        List<Role> roleList = loggedInUser.getRoles();
+        model.addAttribute("roleList", roleList);
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("userLoggedIn", loggedInUser);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("users_roles", loggedInUser.getRoles());
+
+        return "pipiskaadmin1";
+    }
+
 }

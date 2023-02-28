@@ -3,12 +3,13 @@ package ru.kata.spring.boot_security.demo.models;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "roles")
+@Transactional
 public class Role implements GrantedAuthority {
 
     public Role() {
@@ -21,19 +22,15 @@ public class Role implements GrantedAuthority {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleId;
+    private int Id;
 
     @Column(name = "role_name")
     private String role;
 
-    @Transient
+
     @ManyToMany(
-            fetch = FetchType.EAGER,
             mappedBy = "roles")
     private List<User> users;
-
-
-
 
     public List<User> getUsers() {
         return users;
@@ -43,17 +40,18 @@ public class Role implements GrantedAuthority {
         this.users = users;
     }
 
+
     @Override
     public String getAuthority() {
         return role;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public int getId() {
+        return Id;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setId(int roleId) {
+        this.Id = Id;
     }
 
     public String getRole() {
@@ -70,4 +68,6 @@ public class Role implements GrantedAuthority {
                 "role='" + role + '\'' +
                 '}';
     }
+
+
 }

@@ -47,8 +47,9 @@ public class User implements UserDetails {
 
 
     @ManyToMany(
-            cascade = CascadeType.PERSIST,
-            fetch = FetchType.EAGER)
+            cascade = CascadeType.PERSIST
+//            , fetch = FetchType.EAGER
+    )
     @JoinTable(
             name = "roles_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
